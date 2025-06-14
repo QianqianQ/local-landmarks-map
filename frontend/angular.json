@@ -67,17 +67,24 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "host": "0.0.0.0",
+            "port": 4200
+          },
           "configurations": {
             "production": {
-              "browserTarget": "landmarks-map:build:production"
+              "buildTarget": "landmarks-map:build:production"
             },
             "development": {
-              "browserTarget": "landmarks-map:build:development"
+              "buildTarget": "landmarks-map:build:development"
             }
           },
           "defaultConfiguration": "development"
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
