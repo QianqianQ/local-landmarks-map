@@ -1,14 +1,29 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, send_from_directory
 from app import app
 from wikipedia_service import WikipediaService
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 @app.route('/')
 def index():
-    """Serve the main map page"""
-    return render_template('index.html')
+    """Serve the Angular frontend or fallback to Flask template"""
+    # Check if Angular build exists
+    angular_dist_path = os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map')
+    if os.path.exists(os.path.join(angular_dist_path, 'index.html')):
+        return send_from_directory(angular_dist_path, 'index.html')
+    else:
+        # Fallback to Flask template
+        return render_template('index.html')
+
+@app.route('/<path:filename>')
+def angular_static(filename):
+    """Serve Angular static files"""
+    angular_dist_path = os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map')
+    if os.path.exists(angular_dist_path):
+        return send_from_directory(angular_dist_path, filename)
+    return "File not found", 404
 
 @app.route('/api/landmarks')
 def get_landmarks():

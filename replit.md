@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a Flask-based web application that displays local landmarks on an interactive map using Wikipedia's geosearch API. The application allows users to explore historical sites, monuments, and points of interest within their current view area on a dynamic map interface.
+This is a full-stack web application with a Flask backend and Angular frontend that displays local landmarks on an interactive map using Wikipedia's geosearch API. The application allows users to explore historical sites, monuments, and points of interest within their current view area on a dynamic map interface.
 
 ## System Architecture
 
@@ -14,9 +14,12 @@ This is a Flask-based web application that displays local landmarks on an intera
 - **CORS**: Enabled for cross-origin requests
 
 ### Frontend Architecture
-- **Map Library**: Leaflet.js for interactive mapping
+- **Framework**: Angular 17 with TypeScript for modern component-based architecture
+- **Map Library**: Leaflet.js for interactive mapping with Angular integration
 - **UI Framework**: Bootstrap with Replit dark theme
 - **Clustering**: Leaflet MarkerCluster for performance optimization
+- **Services**: Reactive programming with RxJS for data management
+- **Build System**: Angular CLI with Webpack for optimized production builds
 - **Responsive Design**: Mobile-first approach with responsive layouts
 
 ## Key Components
@@ -45,26 +48,45 @@ This is a Flask-based web application that displays local landmarks on an intera
    - Placeholder file for future database models if needed
    - Currently no database persistence required
 
-### Frontend Components
+### Frontend Components (Angular)
 
-1. **Main Interface** (`templates/index.html`)
-   - Bootstrap-based responsive layout
-   - Map container with navigation header
-   - Loading overlay for user feedback
-   - Landmark counter display
+1. **App Module** (`frontend/src/app/app.module.ts`)
+   - Main application module with component declarations
+   - Service providers and HTTP client configuration
+   - Bootstrap integration for Angular components
 
-2. **Map Functionality** (`static/js/map.js`)
-   - Leaflet map initialization and configuration
-   - Geolocation support for user positioning
-   - Dynamic landmark loading based on map viewport
-   - Marker clustering for performance
-   - Event handling for map interactions
+2. **Components**
+   - **Map Component** (`frontend/src/app/components/map/`)
+     - Leaflet map integration with Angular lifecycle
+     - Reactive landmark loading using RxJS
+     - Geolocation services integration
+     - Event-driven communication with parent components
+   - **Navbar Component** (`frontend/src/app/components/navbar/`)
+     - Navigation header with location and refresh controls
+     - Real-time landmark count display
+     - User interaction handling
+   - **Loading Overlay** (`frontend/src/app/components/loading-overlay/`)
+     - Reusable loading indicator component
+   - **Error Alert** (`frontend/src/app/components/error-alert/`)
+     - Error message display with auto-hide functionality
 
-3. **Styling** (`static/css/style.css`)
-   - Dark theme integration with Bootstrap
-   - Custom map control styling
-   - Responsive layout adjustments
-   - Marker cluster customizations
+3. **Services**
+   - **Landmarks Service** (`frontend/src/app/services/landmarks.service.ts`)
+     - HTTP client for API communication
+     - Reactive data streams for landmark updates
+   - **Geolocation Service** (`frontend/src/app/services/geolocation.service.ts`)
+     - Browser geolocation API wrapper
+     - Observable-based location tracking
+
+4. **Models and Interfaces** (`frontend/src/app/models/`)
+   - TypeScript interfaces for type safety
+   - Landmark and API response models
+   - Geolocation position interfaces
+
+5. **Styling** (`frontend/src/styles.scss`)
+   - Global SCSS styles with Bootstrap integration
+   - Dark theme compatibility
+   - Responsive design utilities
 
 ## Data Flow
 
