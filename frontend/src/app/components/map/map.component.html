@@ -1,0 +1,15 @@
+<div class="position-relative map-container">
+  <div #mapContainer class="map"></div>
+  
+  <!-- Map controls -->
+  <div class="map-controls position-absolute top-0 end-0 m-3">
+    <div class="btn-group-vertical" role="group">
+      <button class="btn btn-secondary" title="Refresh landmarks" (click)="onRefreshRequested()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-loading-overlay [isVisible]="isLoadingVisible"></app-loading-overlay>
+<app-error-alert [isVisible]="isErrorVisible" [message]="errorMessage"></app-error-alert>

@@ -1,0 +1,9 @@
+<div 
+  *ngIf="isVisible" 
+  class="alert alert-danger alert-dismissible fade show position-fixed bottom-0 start-50 translate-middle-x mb-3 error-alert" 
+  role="alert" 
+  style="z-index: 1050;">
+  <i class="fas fa-exclamation-triangle me-2"></i>
+  <span>{{ message }}</span>
+  <button type="button" class="btn-close" (click)="hide()"></button>
+</div>

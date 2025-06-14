@@ -1,7 +1,13 @@
-<app-loading-overlay></app-loading-overlay>
-<app-error-alert></app-error-alert>
-
 <div class="container-fluid p-0">
-  <app-navbar></app-navbar>
-  <app-map></app-map>
+  <app-navbar 
+    (locationFound)="onLocationFound($event)"
+    (refreshRequested)="onRefreshRequested()"
+    (errorOccurred)="onErrorOccurred($event)"
+    #navbar></app-navbar>
+  <app-map 
+    (locationFound)="navbar.onLocationFound($event)"
+    (refreshRequested)="navbar.onRefreshRequested()"
+    (errorOccurred)="navbar.onErrorOccurred($event)"
+    (landmarkCountChanged)="navbar.updateLandmarkCount($event)"
+    #mapComponent></app-map>
 </div>
