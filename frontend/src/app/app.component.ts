@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MapComponent } from './components/map/map.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { GeolocationPosition } from './services/geolocation.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,24 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  @ViewChild('mapComponent') mapComponent!: MapComponent;
+  @ViewChild('navbar') navbar!: NavbarComponent;
+
   title = 'Local Landmarks Map';
+
+  onLocationFound(position: GeolocationPosition): void {
+    this.mapComponent.onLocationFound(position);
+  }
+
+  onRefreshRequested(): void {
+    this.mapComponent.onRefreshRequested();
+  }
+
+  onErrorOccurred(message: string): void {
+    this.mapComponent.onErrorOccurred(message);
+  }
+
+  onLandmarkCountChanged(count: number): void {
+    this.navbar.updateLandmarkCount(count);
+  }
 }

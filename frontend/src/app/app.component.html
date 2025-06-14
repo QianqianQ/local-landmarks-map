@@ -5,9 +5,6 @@
     (errorOccurred)="onErrorOccurred($event)"
     #navbar></app-navbar>
   <app-map 
-    (locationFound)="navbar.onLocationFound($event)"
-    (refreshRequested)="navbar.onRefreshRequested()"
-    (errorOccurred)="navbar.onErrorOccurred($event)"
-    (landmarkCountChanged)="navbar.updateLandmarkCount($event)"
+    (landmarkCountChanged)="onLandmarkCountChanged($event)"
     #mapComponent></app-map>
 </div>

@@ -1,12 +1,10 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 
 import { LandmarksService } from '../../services/landmarks.service';
 import { GeolocationService, GeolocationPosition } from '../../services/geolocation.service';
 import { Landmark, LandmarkBounds } from '../../models/landmark.interface';
-
-declare let require: any;
 
 @Component({
   selector: 'app-map',
@@ -15,6 +13,7 @@ declare let require: any;
 })
 export class MapComponent implements OnInit, AfterViewInit {
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef;
+  @Output() landmarkCountChanged = new EventEmitter<number>();
 
   private map!: L.Map;
   private markersGroup!: L.MarkerClusterGroup;
@@ -35,9 +34,9 @@ export class MapComponent implements OnInit, AfterViewInit {
     // Fix for default markers in Leaflet
     delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
-      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-      iconUrl: require('leaflet/dist/images/marker-icon.png'),
-      shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
     });
   }
 
@@ -126,6 +125,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     // Update landmark count
     this.landmarkCount = landmarks.length;
+    this.landmarkCountChanged.emit(landmarks.length);
 
     landmarks.forEach(landmark => {
       const marker = this.createLandmarkMarker(landmark);
