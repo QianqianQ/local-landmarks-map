@@ -145,8 +145,6 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
-- June 15, 2025. Fixed deployment issues by creating complete Angular build with landmark photo support
-- June 15, 2025. Added landmark thumbnail images back to map popups with enhanced styling
 - June 15, 2025. Updated Angular to version 19.2.15 with latest TypeScript and dependencies
 - June 15, 2025. Removed unused static and templates folders, cleaned up Flask routes for pure API backend
 - June 15, 2025. Upgraded to Python 3.12.7 and updated all dependencies
