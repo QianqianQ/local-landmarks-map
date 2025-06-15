@@ -7,7 +7,7 @@ This is a full-stack web application with a Flask backend and Angular frontend t
 ## System Architecture
 
 ### Backend Architecture
-- **Framework**: Flask (Python 3.11) with a modular structure
+- **Framework**: Flask (Python 3.12) with a modular structure
 - **Web Server**: Gunicorn for production deployment with autoscaling
 - **API Layer**: RESTful API endpoints for landmark data retrieval
 - **External Services**: Wikipedia API integration for landmark information
@@ -123,7 +123,7 @@ This is a full-stack web application with a Flask backend and Angular frontend t
 
 ### Development Environment
 - **Platform**: Replit with Nix package management
-- **Runtime**: Python 3.11 with required system packages (OpenSSL, PostgreSQL)
+- **Runtime**: Python 3.12 with required system packages (OpenSSL, PostgreSQL)
 - **Development Server**: Flask built-in server with hot reload
 
 ### Production Deployment
@@ -145,4 +145,5 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
-- June 14, 2025. Initial setup
+- June 15, 2025. Upgraded to Python 3.12.7 and updated all dependencies
+- June 14, 2025. Initial setup with Angular frontend integration
