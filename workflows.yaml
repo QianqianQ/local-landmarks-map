@@ -1,0 +1,16 @@
+name: Build Frontend
+on:
+  - deploy
+  - manual
+
+jobs:
+  build:
+    name: Build Angular Frontend
+    runs-on: replit
+    steps:
+      - name: Install dependencies
+        run: cd frontend && npm install --silent
+      - name: Build Angular app
+        run: cd frontend && npm run build -- --progress=false
+      - name: Verify build
+        run: ls -la frontend/dist/landmarks-map/

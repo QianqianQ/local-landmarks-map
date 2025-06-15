@@ -6,19 +6,45 @@ import os
 
 logger = logging.getLogger(__name__)
 
+def get_angular_dist_path():
+    """Get the absolute path to the Angular build directory"""
+    return os.path.abspath(os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map'))
+
+def check_angular_build():
+    """Check if Angular build exists and contains index.html"""
+    dist_path = get_angular_dist_path()
+    index_path = os.path.join(dist_path, 'index.html')
+    return os.path.exists(dist_path) and os.path.exists(index_path)
+
 @app.route('/')
 def index():
     """Serve the Angular frontend"""
-    angular_dist_path = os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map')
+    if not check_angular_build():
+        logger.error("Angular build not found. Please build the frontend first.")
+        return jsonify({
+            'error': 'Frontend not built',
+            'message': 'Angular application needs to be built. Run "cd frontend && npm run build" first.'
+        }), 500
+    
+    angular_dist_path = get_angular_dist_path()
     return send_from_directory(angular_dist_path, 'index.html')
 
 @app.route('/<path:filename>')
 def angular_static(filename):
     """Serve Angular static files"""
-    angular_dist_path = os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map')
-    if os.path.exists(angular_dist_path):
+    if not check_angular_build():
+        logger.error(f"Angular build not found when requesting: {filename}")
+        return jsonify({
+            'error': 'Frontend not built',
+            'message': 'Angular application needs to be built. Run "cd frontend && npm run build" first.'
+        }), 500
+    
+    angular_dist_path = get_angular_dist_path()
+    try:
         return send_from_directory(angular_dist_path, filename)
-    return "File not found", 404
+    except FileNotFoundError:
+        logger.warning(f"Static file not found: {filename}")
+        return "File not found", 404
 
 @app.route('/api/landmarks')
 def get_landmarks():
@@ -56,8 +82,18 @@ def get_landmarks():
 @app.errorhandler(404)
 def not_found(error):
     """Handle 404 errors - serve Angular frontend for client-side routing"""
-    angular_dist_path = os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map')
-    return send_from_directory(angular_dist_path, 'index.html'), 404
+    if not check_angular_build():
+        logger.error("Angular build not found for 404 handler.")
+        return jsonify({
+            'error': 'Frontend not built',
+            'message': 'Angular application needs to be built. Run "cd frontend && npm run build" first.'
+        }), 404
+    
+    angular_dist_path = get_angular_dist_path()
+    try:
+        return send_from_directory(angular_dist_path, 'index.html'), 404
+    except FileNotFoundError:
+        return jsonify({'error': 'Frontend build files not found'}), 404
 
 @app.errorhandler(500)
 def internal_error(error):
