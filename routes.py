@@ -1,8 +1,9 @@
 from flask import jsonify, request, send_from_directory
-from app import app
+from app import app, cache
 from wikipedia_service import WikipediaService
 import logging
 import os
+import hashlib
 
 logger = logging.getLogger(__name__)
 
