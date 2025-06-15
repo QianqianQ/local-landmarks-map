@@ -4,7 +4,7 @@ A full-stack web application that displays local landmarks on an interactive map
 
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-3.1.1-green.svg)
-![Angular](https://img.shields.io/badge/angular-17-red.svg)
+![Angular](https://img.shields.io/badge/angular-19-red.svg)
 ![TypeScript](https://img.shields.io/badge/typescript-5.0-blue.svg)
 
 ## Features
@@ -27,7 +27,7 @@ A full-stack web application that displays local landmarks on an interactive map
 - **Flask-CORS** - Cross-origin resource sharing
 
 ### Frontend
-- **Angular 17** - Modern TypeScript framework
+- **Angular 19** - Modern TypeScript framework
 - **Leaflet.js** - Interactive mapping library
 - **Bootstrap** - UI framework with dark theme
 - **RxJS** - Reactive programming for data management

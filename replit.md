@@ -14,7 +14,7 @@ This is a full-stack web application with a Flask backend and Angular frontend t
 - **CORS**: Enabled for cross-origin requests
 
 ### Frontend Architecture
-- **Framework**: Angular 17 with TypeScript for modern component-based architecture
+- **Framework**: Angular 19 with TypeScript for modern component-based architecture
 - **Map Library**: Leaflet.js for interactive mapping with Angular integration
 - **UI Framework**: Bootstrap with Replit dark theme
 - **Clustering**: Leaflet MarkerCluster for performance optimization
@@ -145,6 +145,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 15, 2025. Updated Angular to version 19.2.15 with latest TypeScript and dependencies
 - June 15, 2025. Removed unused static and templates folders, cleaned up Flask routes for pure API backend
 - June 15, 2025. Upgraded to Python 3.12.7 and updated all dependencies
 - June 14, 2025. Initial setup with Angular frontend integration
