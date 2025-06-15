@@ -33,7 +33,7 @@ This is a full-stack web application with a Flask backend and Angular frontend t
    - Debug logging setup
 
 2. **Route Handlers** (`routes.py`)
-   - Main page route serving the HTML interface
+   - Angular frontend serving route
    - `/api/landmarks` endpoint for fetching landmark data based on map bounds
    - Error handling for 404 and API errors
    - Input validation for coordinate parameters
@@ -145,5 +145,6 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 15, 2025. Removed unused static and templates folders, cleaned up Flask routes for pure API backend
 - June 15, 2025. Upgraded to Python 3.12.7 and updated all dependencies
 - June 14, 2025. Initial setup with Angular frontend integration

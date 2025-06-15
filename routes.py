@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request, send_from_directory
+from flask import jsonify, request, send_from_directory
 from app import app
 from wikipedia_service import WikipediaService
 import logging
@@ -8,14 +8,9 @@ logger = logging.getLogger(__name__)
 
 @app.route('/')
 def index():
-    """Serve the Angular frontend or fallback to Flask template"""
-    # Check if Angular build exists
+    """Serve the Angular frontend"""
     angular_dist_path = os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map')
-    if os.path.exists(os.path.join(angular_dist_path, 'index.html')):
-        return send_from_directory(angular_dist_path, 'index.html')
-    else:
-        # Fallback to Flask template
-        return render_template('index.html')
+    return send_from_directory(angular_dist_path, 'index.html')
 
 @app.route('/<path:filename>')
 def angular_static(filename):
@@ -60,8 +55,9 @@ def get_landmarks():
 
 @app.errorhandler(404)
 def not_found(error):
-    """Handle 404 errors"""
-    return render_template('index.html'), 404
+    """Handle 404 errors - serve Angular frontend for client-side routing"""
+    angular_dist_path = os.path.join(os.getcwd(), 'frontend', 'dist', 'landmarks-map')
+    return send_from_directory(angular_dist_path, 'index.html'), 404
 
 @app.errorhandler(500)
 def internal_error(error):
