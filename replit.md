@@ -1,18 +1,5 @@
 # Local Landmarks Map Application
 
-## What This App Does
-
-This web application helps you discover interesting landmarks and historical sites around any location on Earth. Simply open the map, and it automatically shows you Wikipedia articles about nearby monuments, buildings, parks, and other points of interest right where you're looking.
-
-**Key Features:**
-- **Interactive Map**: Pan and zoom to explore any area - landmarks load automatically as you move around
-- **Real-time Discovery**: See historical sites, monuments, and interesting places appear as markers on the map
-- **Detailed Information**: Click any marker to read about the landmark with descriptions and images from Wikipedia
-- **Location Aware**: Use your current location to instantly discover what's interesting nearby
-- **Global Coverage**: Works anywhere in the world where Wikipedia has location data
-
-Perfect for travelers, history enthusiasts, or anyone curious about the stories behind the places around them.
-
 ## Overview
 
 This is a full-stack web application with a Flask backend and Angular frontend that displays local landmarks on an interactive map using Wikipedia's geosearch API. The application allows users to explore historical sites, monuments, and points of interest within their current view area on a dynamic map interface.
