@@ -55,11 +55,20 @@ def get_landmarks():
     Expects query parameters: north, south, east, west (coordinates)
     """
     try:
-        # Get bounding box coordinates from query parameters
-        north = float(request.args.get('north', 0))
-        south = float(request.args.get('south', 0))
-        east = float(request.args.get('east', 0))
-        west = float(request.args.get('west', 0))
+        # Get bounding box coordinates from query parameters with NaN protection
+        def safe_float(value, default=0):
+            """Convert to float with NaN protection"""
+            if isinstance(value, str) and value.lower() in ('nan', '+nan', '-nan', 'inf', '+inf', '-inf'):
+                raise ValueError(f"Invalid numeric value: {value}")
+            result = float(value) if value is not None else default
+            if not (result == result):  # NaN check (NaN != NaN)
+                raise ValueError("NaN values not allowed")
+            return result
+        
+        north = safe_float(request.args.get('north'), 0)
+        south = safe_float(request.args.get('south'), 0)
+        east = safe_float(request.args.get('east'), 0)
+        west = safe_float(request.args.get('west'), 0)
         
         logger.debug(f"Fetching landmarks for bounds: N:{north}, S:{south}, E:{east}, W:{west}")
         
