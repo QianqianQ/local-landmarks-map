@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+echo "Building Angular frontend for production deployment..."
+
+# Navigate to frontend directory
+cd frontend
+
+# Ensure dependencies are installed
+echo "Checking npm dependencies..."
+if [ ! -d "node_modules" ] || [ ! -f "node_modules/.package-lock.json" ]; then
+    echo "Installing npm dependencies..."
+    npm install --silent --no-progress
+fi
+
+# Clean existing build
+echo "Cleaning previous build..."
+rm -rf dist/landmarks-map
+
+# Build Angular application
+echo "Building Angular application..."
+npx ng build --configuration production --output-path dist/landmarks-map --no-progress
+
+# Verify build success
+if [ -f "dist/landmarks-map/index.html" ]; then
+    echo "✓ Angular build completed successfully"
+    echo "✓ Build files created in frontend/dist/landmarks-map/"
+    ls -la dist/landmarks-map/
+else
+    echo "✗ Angular build failed - index.html not found"
+    exit 1
+fi
