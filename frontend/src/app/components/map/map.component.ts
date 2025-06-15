@@ -46,8 +46,8 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   private initializeMap(): void {
-    // Create map centered on New York City by default
-    this.map = L.map(this.mapContainer.nativeElement).setView([40.7128, -74.0060], 13);
+    // Create map centered on Helsinki, Finland by default
+    this.map = L.map(this.mapContainer.nativeElement).setView([60.1699, 24.9384], 13);
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
