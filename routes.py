@@ -23,7 +23,8 @@ def index():
         logger.error("Angular build not found. Please build the frontend first.")
         return jsonify({
             'error': 'Frontend not built',
-            'message': 'Angular application needs to be built. Run "cd frontend && npm run build" first.'
+            'message': 'Angular application needs to be built. The build files are missing.',
+            'suggestion': 'Run the build process to generate the frontend files.'
         }), 500
     
     angular_dist_path = get_angular_dist_path()
