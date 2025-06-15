@@ -5,7 +5,7 @@ A full-stack web application that displays local landmarks on an interactive map
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-3.1.1-green.svg)
 ![Angular](https://img.shields.io/badge/angular-19-red.svg)
-![TypeScript](https://img.shields.io/badge/typescript-5.0-blue.svg)
+![TypeScript](https://img.shields.io/badge/typescript-5.8-blue.svg)
 
 ## Features
 
@@ -50,10 +50,10 @@ A full-stack web application that displays local landmarks on an interactive map
 
 2. **Set up Python environment**
    ```bash
-   # Install Python dependencies
-   pip install -r requirements.txt
-   # or using uv
+   # Install Python dependencies using uv (preferred)
    uv install
+   # or using pip if uv is not available
+   pip install -e .
    ```
 
 3. **Set up Angular frontend**
@@ -156,7 +156,7 @@ This application is optimized for Replit deployment:
 For other platforms:
 
 1. Ensure Python 3.12+ is available
-2. Install dependencies: `pip install -r requirements.txt`
+2. Install dependencies: `uv install` or `pip install -e .`
 3. Build Angular frontend: `cd frontend && npm run build`
 4. Run with Gunicorn: `gunicorn --bind 0.0.0.0:5000 main:app`
 
@@ -169,15 +169,6 @@ For other platforms:
 ### Map Configuration
 The application uses OpenStreetMap tiles by default. Leaflet configuration can be modified in the Angular map component.
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes and add tests
-4. Commit your changes: `git commit -am 'Add feature'`
-5. Push to the branch: `git push origin feature-name`
-6. Submit a pull request
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -189,15 +180,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Leaflet](https://leafletjs.com/) for the mapping library
 - [Angular](https://angular.io/) for the frontend framework
 - [Flask](https://flask.palletsprojects.com/) for the backend framework
-
-## Support
-
-If you encounter any issues or have questions:
-
-1. Check the [Issues](https://github.com/yourusername/local-landmarks-map/issues) page
-2. Create a new issue with detailed information
-3. Include steps to reproduce any bugs
-
----
-
-**Built with ❤️ using Flask, Angular, and Wikipedia data**
