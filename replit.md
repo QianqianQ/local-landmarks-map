@@ -121,6 +121,10 @@ The Local Landmarks Map Application is a full-stack web application that helps u
 
 ## Changelog
 
+- June 16, 2025. Added category filtering system
+  - Backend: Wikipedia category detection and smart filtering
+  - Frontend: Category dropdown with 8 filter types
+  - API: Enhanced with category parameter support
 - June 15, 2025. Initial setup
 
 ## User Preferences
