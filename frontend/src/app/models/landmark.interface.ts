@@ -12,6 +12,7 @@ export interface Landmark {
   description: string;
   url: string;
   thumbnail?: string;
+  categories?: string[];
 }
 
 export interface LandmarksResponse {

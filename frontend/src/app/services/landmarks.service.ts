@@ -12,12 +12,16 @@ export class LandmarksService {
 
   constructor(private http: HttpClient) { }
 
-  getLandmarks(bounds: LandmarkBounds): Observable<LandmarksResponse> {
-    const params = new HttpParams()
+  getLandmarks(bounds: LandmarkBounds, category?: string): Observable<LandmarksResponse> {
+    let params = new HttpParams()
       .set('north', bounds.north.toString())
       .set('south', bounds.south.toString())
       .set('east', bounds.east.toString())
       .set('west', bounds.west.toString());
+
+    if (category && category !== 'all') {
+      params = params.set('category', category);
+    }
 
     return this.http.get<LandmarksResponse>(`${this.apiUrl}/landmarks`, { params });
   }

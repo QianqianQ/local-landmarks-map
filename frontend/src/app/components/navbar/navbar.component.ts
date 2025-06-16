@@ -10,9 +10,22 @@ export class NavbarComponent {
   @Output() locationFound = new EventEmitter<GeolocationPosition>();
   @Output() refreshRequested = new EventEmitter<void>();
   @Output() errorOccurred = new EventEmitter<string>();
+  @Output() categoryChanged = new EventEmitter<string>();
 
   landmarkCount = 0;
   isLocating = false;
+  selectedCategory = 'all';
+  
+  categories = [
+    { value: 'all', label: 'All Landmarks' },
+    { value: 'museums', label: 'Museums & Galleries' },
+    { value: 'churches', label: 'Churches & Religious' },
+    { value: 'monuments', label: 'Monuments & Memorials' },
+    { value: 'parks', label: 'Parks & Gardens' },
+    { value: 'buildings', label: 'Historic Buildings' },
+    { value: 'entertainment', label: 'Entertainment' },
+    { value: 'transport', label: 'Transportation' }
+  ];
 
   constructor(private geolocationService: GeolocationService) {
     this.geolocationService.isLocating$.subscribe(isLocating => {

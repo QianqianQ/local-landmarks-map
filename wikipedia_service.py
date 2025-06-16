@@ -155,17 +155,27 @@ class WikipediaService:
             pageids = [str(pageid) for pageid, _ in batch]
             
             try:
+                # Include categories if requested
+                props = 'extracts|pageimages'
+                if include_categories:
+                    props += '|categories'
+                
                 params = {
                     'action': 'query',
                     'pageids': '|'.join(pageids),
-                    'prop': 'extracts|pageimages',
+                    'prop': props,
                     'exintro': True,
                     'explaintext': True,
                     'exsentences': 3,
                     'piprop': 'thumbnail',
                     'pithumbsize': 300,
+                    'clshow': '!hidden' if include_categories else None,
+                    'cllimit': 50 if include_categories else None,
                     'format': 'json'
                 }
+                
+                # Remove None values
+                params = {k: v for k, v in params.items() if v is not None}
                 
                 response = self.session.get(self.api_url, params=params, timeout=10)
                 response.raise_for_status()
@@ -179,11 +189,19 @@ class WikipediaService:
                         landmark_info = {
                             'description': page_data.get('extract', 'No description available.'),
                             'url': f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}",
-                            'thumbnail': None
+                            'thumbnail': None,
+                            'categories': []
                         }
                         
                         if 'thumbnail' in page_data:
                             landmark_info['thumbnail'] = page_data['thumbnail']['source']
+                        
+                        # Extract categories if available
+                        if 'categories' in page_data:
+                            landmark_info['categories'] = [
+                                cat['title'].replace('Category:', '') 
+                                for cat in page_data['categories']
+                            ]
                         
                         # Cache the result
                         self._details_cache[pageid] = landmark_info
@@ -203,6 +221,56 @@ class WikipediaService:
                         results[pageid] = fallback_info
         
         return results
+
+    def _matches_category_filter(self, landmark_info: Dict, category_filter: str) -> bool:
+        """
+        Check if a landmark matches the specified category filter
+        
+        Args:
+            landmark_info: Dictionary containing landmark information including categories
+            category_filter: Category to filter by (e.g., 'museums', 'churches', 'monuments')
+            
+        Returns:
+            True if the landmark matches the filter, False otherwise
+        """
+        if not category_filter or 'categories' not in landmark_info:
+            return True
+        
+        categories = landmark_info.get('categories', [])
+        category_filter_lower = category_filter.lower()
+        
+        # Define category mappings for common filter types
+        category_mappings = {
+            'museums': ['museums', 'museum', 'art galleries', 'galleries'],
+            'churches': ['churches', 'cathedrals', 'religious buildings', 'places of worship', 'basilicas', 'chapels'],
+            'monuments': ['monuments', 'memorials', 'statues', 'sculptures', 'commemorative'],
+            'parks': ['parks', 'gardens', 'nature reserves', 'botanical gardens'],
+            'buildings': ['buildings', 'architecture', 'skyscrapers', 'historic buildings'],
+            'historic': ['historic', 'historical', 'heritage', 'archaeological'],
+            'entertainment': ['entertainment', 'theaters', 'cinemas', 'venues', 'arenas'],
+            'shopping': ['shopping', 'markets', 'malls', 'commercial'],
+            'transport': ['transport', 'stations', 'airports', 'bridges', 'infrastructure']
+        }
+        
+        # Get relevant keywords for the filter
+        filter_keywords = category_mappings.get(category_filter_lower, [category_filter_lower])
+        
+        # Check if any category contains any of the filter keywords
+        for category in categories:
+            category_lower = category.lower()
+            for keyword in filter_keywords:
+                if keyword in category_lower:
+                    return True
+        
+        # Also check in title and description as fallback
+        title_lower = landmark_info.get('title', '').lower()
+        description_lower = landmark_info.get('description', '').lower()
+        
+        for keyword in filter_keywords:
+            if keyword in title_lower or keyword in description_lower:
+                return True
+        
+        return False
 
     def _get_page_details(self, pageid: int, title: str) -> Optional[Dict]:
         """

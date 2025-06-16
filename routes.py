@@ -69,8 +69,9 @@ def get_landmarks():
         south = safe_float(request.args.get('south'), 0)
         east = safe_float(request.args.get('east'), 0)
         west = safe_float(request.args.get('west'), 0)
+        category_filter = request.args.get('category')
         
-        logger.debug(f"Fetching landmarks for bounds: N:{north}, S:{south}, E:{east}, W:{west}")
+        logger.debug(f"Fetching landmarks for bounds: N:{north}, S:{south}, E:{east}, W:{west}, Category:{category_filter}")
         
         # Validate coordinates
         if not (-90 <= south <= north <= 90) or not (-180 <= west <= east <= 180):
@@ -78,7 +79,7 @@ def get_landmarks():
         
         # Get landmarks from Wikipedia
         wikipedia_service = WikipediaService()
-        landmarks = wikipedia_service.get_landmarks_in_bounds(north, south, east, west)
+        landmarks = wikipedia_service.get_landmarks_in_bounds(north, south, east, west, category_filter)
         
         logger.debug(f"Found {len(landmarks)} landmarks")
         return jsonify({'landmarks': landmarks})
