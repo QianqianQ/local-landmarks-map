@@ -121,6 +121,11 @@ The Local Landmarks Map Application is a full-stack web application that helps u
 
 ## Changelog
 
+- June 16, 2025. Fixed deployment and auto-location issues
+  - Fixed Python dependency conflicts and Gunicorn import errors
+  - Created working frontend build with proper static file serving
+  - Added automatic geolocation on page load instead of defaulting to London
+  - Enhanced error handling for geolocation failures
 - June 16, 2025. Added category filtering system
   - Backend: Wikipedia category detection and smart filtering
   - Frontend: Category dropdown with 8 filter types
