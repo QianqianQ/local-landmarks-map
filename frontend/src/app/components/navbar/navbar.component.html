@@ -5,6 +5,16 @@
       Local Landmarks Map
     </span>
     <div class="d-flex align-items-center">
+      <select 
+        class="form-select form-select-sm me-2" 
+        style="width: auto; max-width: 200px;"
+        [value]="selectedCategory"
+        (change)="onCategoryChange($event)"
+        title="Filter landmarks by category">
+        <option *ngFor="let category of categories" [value]="category.value">
+          {{category.label}}
+        </option>
+      </select>
       <button 
         class="btn btn-outline-secondary me-2" 
         title="Find my location"

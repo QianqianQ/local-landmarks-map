@@ -26,6 +26,10 @@ export class AppComponent {
     this.mapComponent.onErrorOccurred(message);
   }
 
+  onCategoryChanged(category: string): void {
+    this.mapComponent.onCategoryChanged(category);
+  }
+
   onLandmarkCountChanged(count: number): void {
     this.navbar.updateLandmarkCount(count);
   }

@@ -48,6 +48,12 @@ export class NavbarComponent {
     this.refreshRequested.emit();
   }
 
+  onCategoryChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.selectedCategory = target.value;
+    this.categoryChanged.emit(this.selectedCategory);
+  }
+
   updateLandmarkCount(count: number): void {
     this.landmarkCount = count;
   }

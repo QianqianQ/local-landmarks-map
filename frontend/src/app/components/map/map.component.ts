@@ -19,6 +19,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   private markersGroup!: L.MarkerClusterGroup;
   private currentLandmarks: Landmark[] = [];
   private isLoading = false;
+  private currentCategory = 'all';
 
   isLoadingVisible = false;
   isErrorVisible = false;
@@ -103,7 +104,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       west: bounds.getWest()
     };
 
-    this.landmarksService.getLandmarks(landmarkBounds).subscribe({
+    this.landmarksService.getLandmarks(landmarkBounds, this.currentCategory).subscribe({
       next: (response) => {
         this.displayLandmarks(response.landmarks);
         this.isLoading = false;
@@ -173,6 +174,11 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   onRefreshRequested(): void {
+    this.loadLandmarks();
+  }
+
+  onCategoryChanged(category: string): void {
+    this.currentCategory = category;
     this.loadLandmarks();
   }
 
