@@ -26,12 +26,13 @@ class WikipediaService:
         )
         self.session.mount('https://', adapter)
     
-    def get_landmarks_in_bounds(self, north: float, south: float, east: float, west: float) -> List[Dict]:
+    def get_landmarks_in_bounds(self, north: float, south: float, east: float, west: float, category_filter: Optional[str] = None) -> List[Dict]:
         """
         Fetch landmarks within the given bounding box using Wikipedia's geosearch API
         
         Args:
             north, south, east, west: Bounding box coordinates
+            category_filter: Optional category to filter landmarks (e.g., 'museums', 'churches', 'monuments')
             
         Returns:
             List of landmark dictionaries with title, coordinates, description, etc.
@@ -91,7 +92,8 @@ class WikipediaService:
             # Batch process page details for better performance
             if filtered_pages:
                 page_details = self._get_page_details_batch(
-                    [(p['pageid'], p['title']) for p in filtered_pages]
+                    [(p['pageid'], p['title']) for p in filtered_pages],
+                    include_categories=True
                 )
                 
                 for page in filtered_pages:
@@ -103,6 +105,11 @@ class WikipediaService:
                             'lon': page['lon'],
                             'title': page['title']
                         })
+                        
+                        # Apply category filter if specified
+                        if category_filter and not self._matches_category_filter(landmark_info, category_filter):
+                            continue
+                            
                         landmarks.append(landmark_info)
             
             logger.debug(f"Filtered to {len(landmarks)} landmarks within bounds")
@@ -115,7 +122,7 @@ class WikipediaService:
             logger.error(f"Error processing Wikipedia data: {e}")
             return []
     
-    def _get_page_details_batch(self, page_list: List[tuple]) -> Dict[int, Dict]:
+    def _get_page_details_batch(self, page_list: List[tuple], include_categories: bool = False) -> Dict[int, Dict]:
         """
         Get details for multiple pages in a single API call for better performance
         
