@@ -1,137 +1,129 @@
-# Local Landmarks Map Application
+# Overview
 
-## Overview
+This is a full-stack web application that helps users discover interesting landmarks and historical sites around any location on Earth using interactive maps. The application consists of a Flask backend that serves Wikipedia landmark data and an Angular frontend with Leaflet.js mapping functionality.
 
-The Local Landmarks Map Application is a full-stack web application that helps users discover interesting landmarks and historical sites around any location on Earth. The application combines a Flask backend with an Angular frontend to provide an interactive map experience powered by Wikipedia's geosearch API. Users can explore landmarks in real-time as they navigate the map, with automatic loading of nearby points of interest.
+# System Architecture
 
-## System Architecture
+## Backend Architecture
+- **Framework**: Flask (Python 3.12) with modular structure
+- **Web Server**: Gunicorn for production deployment with autoscaling capabilities
+- **API Layer**: RESTful API endpoints for landmark data retrieval
+- **Caching**: Flask-Caching with simple in-memory caching (5-minute timeout)
+- **CORS**: Enabled for cross-origin requests between frontend and backend
+- **Proxy Support**: ProxyFix middleware for proper handling of forwarded headers
 
-### Backend Architecture
-- **Framework**: Flask (Python 3.12) with WSGI deployment via Gunicorn
-- **Web Server**: Gunicorn with autoscaling deployment target for production
-- **API Design**: RESTful API endpoints serving landmark data
-- **Caching**: Flask-Caching with simple cache backend (5-minute TTL) for performance optimization
-- **CORS**: Enabled via Flask-CORS for cross-origin requests from Angular frontend
-- **Proxy Support**: ProxyFix middleware for proper header handling in deployment
-
-### Frontend Architecture
+## Frontend Architecture
 - **Framework**: Angular 19 with TypeScript for modern component-based architecture
-- **Build System**: Angular CLI with Webpack bundling and production optimization
-- **Map Integration**: Leaflet.js for interactive mapping capabilities
+- **Map Library**: Leaflet.js for interactive mapping with Angular integration
+- **UI Framework**: Bootstrap 5.3 with Replit dark theme
 - **Clustering**: Leaflet MarkerCluster for performance optimization with large datasets
-- **UI Framework**: Bootstrap 5.3 with Replit dark theme integration
-- **Reactive Programming**: RxJS for data management and API communication
+- **Services**: Reactive programming with RxJS for data management
+- **Build System**: Angular CLI with Webpack for optimized production builds
 - **Responsive Design**: Mobile-first approach with responsive layouts
 
-## Key Components
+# Key Components
 
-### Backend Components
+## Backend Components
 
 1. **Application Entry Point** (`app.py`, `main.py`)
-   - Flask application initialization with CORS and caching configuration
-   - ProxyFix middleware for deployment compatibility
-   - Session management with environment-based secret key
+   - Flask application factory pattern
+   - CORS configuration for cross-origin requests
+   - Caching setup for performance optimization
+   - ProxyFix for deployment compatibility
 
 2. **API Routes** (`routes.py`)
-   - Angular static file serving with build verification
-   - API endpoint for landmark data retrieval
+   - RESTful endpoints for landmark data
+   - Angular static file serving
    - Error handling for missing frontend builds
+   - Cache key generation for Wikipedia API responses
 
-3. **Wikipedia Integration** (`wikipedia_service.py`)
-   - Service class for Wikipedia API interaction
-   - Geosearch API integration for landmark discovery
+3. **Wikipedia Service** (`wikipedia_service.py`)
+   - Wikipedia API integration for landmark data
+   - Geosearch functionality with bounding box queries
+   - Category filtering support (museums, churches, monuments, etc.)
    - Connection pooling and retry logic for reliability
    - Response caching to minimize API calls
 
-### Frontend Components
+## Frontend Components
 
-1. **Application Shell** (`app.component.ts`)
-   - Main application component coordinating map and navigation
+1. **Core Application** (`app.component.ts`)
+   - Main application coordinator
    - Event handling between navbar and map components
+   - Cross-component communication management
 
 2. **Interactive Map** (`map.component.ts`)
    - Leaflet.js integration with marker clustering
    - Real-time landmark loading based on map bounds
-   - Popup generation with landmark details and images
+   - Custom popup content with landmark details
+   - Category-based filtering
+   - Geolocation support
 
 3. **Navigation Bar** (`navbar.component.ts`)
-   - Geolocation services integration
-   - Landmark count display and location controls
+   - Category filter dropdown
+   - Location finder button
+   - Landmark count display
+   - User interaction controls
 
-4. **Supporting Components**
-   - Loading overlay for user feedback during API calls
-   - Error alert system for graceful error handling
+4. **Service Layer**
+   - **LandmarksService**: HTTP client for API communication
+   - **GeolocationService**: Browser geolocation wrapper with observables
 
-### Services
+# Data Flow
 
-1. **Landmarks Service** (`landmarks.service.ts`)
-   - HTTP client wrapper for backend API communication
-   - Environment-aware API URL configuration
+1. **User Interaction**: User pans/zooms map or selects category filter
+2. **Bounds Calculation**: Frontend calculates current map viewport bounds
+3. **API Request**: Angular service makes HTTP request to Flask backend with bounds and category
+4. **Wikipedia Query**: Backend queries Wikipedia's geosearch API with location parameters
+5. **Data Processing**: Backend processes and filters Wikipedia response
+6. **Cache Storage**: Processed data cached for 5 minutes to improve performance
+7. **Response Delivery**: Landmark data returned to frontend as JSON
+8. **Map Update**: Frontend updates map markers with clustering for performance
+9. **User Feedback**: Loading states and error handling provide user feedback
 
-2. **Geolocation Service** (`geolocation.service.ts`)
-   - Browser geolocation API wrapper
-   - Observable-based location tracking with loading states
+# External Dependencies
 
-## Data Flow
+## Backend Dependencies
+- **Wikipedia API**: Primary data source for landmark information
+- **Flask-CORS**: Cross-origin request handling
+- **Flask-Caching**: Response caching for performance
+- **Requests**: HTTP client for Wikipedia API calls
+- **Gunicorn**: Production WSGI server
 
-1. **Map Interaction**: User pans/zooms the map, triggering bounds change events
-2. **API Request**: Map component calls LandmarksService with current bounds
-3. **Backend Processing**: Flask routes handler forwards request to WikipediaService
-4. **External API**: Wikipedia geosearch API returns landmark data within bounds
-5. **Response Processing**: Backend formats and caches Wikipedia response
-6. **Frontend Update**: Angular components update map markers and UI elements
-7. **User Interaction**: Clicking markers displays detailed landmark information
-
-## External Dependencies
-
-### Backend Dependencies
-- **Flask**: Web framework with CORS and caching extensions
-- **Requests**: HTTP client for Wikipedia API integration
-- **Gunicorn**: WSGI server for production deployment
-
-### Frontend Dependencies
-- **Angular 19**: Modern frontend framework with TypeScript
+## Frontend Dependencies
 - **Leaflet.js**: Interactive mapping library
-- **Bootstrap 5**: UI framework with responsive design
-- **RxJS**: Reactive programming library for Angular
+- **MarkerCluster**: Performance optimization for large datasets
+- **Bootstrap**: UI framework with dark theme
+- **RxJS**: Reactive programming for data streams
+- **Font Awesome**: Icon library for UI elements
 
-### Third-party Integrations
-- **Wikipedia API**: Geosearch and page content APIs for landmark data
-- **CDN Resources**: Bootstrap themes, Leaflet assets, Font Awesome icons
+## External Services
+- **Wikipedia Geosearch API**: Landmark data retrieval
+- **CDN Resources**: Bootstrap, Leaflet, and Font Awesome assets
 
-## Deployment Strategy
+# Deployment Strategy
 
-### Build Process
-- **Frontend Build**: Angular CLI production build with optimization
-- **Backend Deployment**: Gunicorn WSGI server with autoscaling
-- **Static File Serving**: Flask serves Angular build artifacts
-- **Environment Configuration**: Separate development and production API URLs
+## Production Build Process
+1. **Frontend Build**: Angular CLI compiles TypeScript to optimized JavaScript bundles
+2. **Asset Optimization**: Webpack optimizes CSS, JavaScript, and static assets
+3. **Static File Serving**: Flask serves pre-built Angular assets
+4. **API Routing**: Backend handles `/api/*` routes, frontend handles all other routes
 
-### Infrastructure Requirements
-- **Node.js 20**: Required for Angular development and building
-- **Python 3.12**: Backend runtime environment
-- **PostgreSQL**: Available in environment but not currently utilized
-- **OpenSSL**: For secure HTTP communications
+## Server Configuration
+- **Gunicorn**: WSGI server with auto-scaling deployment target
+- **Port Configuration**: Backend on port 5000, external port 80
+- **Process Management**: Parallel workflows for frontend build and server startup
+- **Build Scripts**: Multiple build strategies (quick, simple, full) for different deployment scenarios
 
-### Performance Optimizations
-- **Caching**: Server-side caching of Wikipedia API responses
-- **Marker Clustering**: Frontend clustering for large datasets
-- **Connection Pooling**: HTTP session reuse for external API calls
-- **Build Optimization**: Angular production build with tree-shaking and minification
+## Environment Management
+- **Development**: Angular dev server with Flask backend proxy
+- **Production**: Static file serving through Flask with optimized builds
+- **Configuration**: Environment-specific API URLs and settings
 
-## Changelog
+# Changelog
 
-- June 16, 2025. Fixed deployment and auto-location issues
-  - Fixed Python dependency conflicts and Gunicorn import errors
-  - Created working frontend build with proper static file serving
-  - Added automatic geolocation on page load instead of defaulting to London
-  - Enhanced error handling for geolocation failures
-- June 16, 2025. Added category filtering system
-  - Backend: Wikipedia category detection and smart filtering
-  - Frontend: Category dropdown with 8 filter types
-  - API: Enhanced with category parameter support
-- June 15, 2025. Initial setup
+Changelog:
+- June 16, 2025. Initial setup
 
-## User Preferences
+# User Preferences
 
 Preferred communication style: Simple, everyday language.
